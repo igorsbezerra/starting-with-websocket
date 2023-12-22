@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Websocket</title>
+</head>
+<body>
+    <h1>Websocket</h1>
+    <div>
+        <input type="text" id="mensagem" />
+        
+        <button id="botao-enviar">Enviar</button>
+    </div>
+
+    <div>
+        <ul id="mensagens"></ul>
+    </div>
+    <script>
+        var ws = new WebSocket('ws://localhost:8080/ws')
+        var mensagem = document.getElementById("mensagem")
+        var botaoEnviar = document.getElementById("botao-enviar")
+        var ul = document.getElementById('mensagens')
+
+        botaoEnviar.onclick = function() {
+            console.log('enviando mensagem', mensagem.value)
+            ws.send(mensagem.value)
+            createLi("[INPUT] ", mensagem.value)
+        }
+
+        ws.onmessage = function(event) {
+            createLi("[OUTPUT] ", event.data);
+        }
+
+        function createLi(type, data) {
+            var li = document.createElement('li')
+            li.appendChild(document.createTextNode(type + data))
+            ul.appendChild(li)
+        }
+    </script>
+</body>
+</html>
